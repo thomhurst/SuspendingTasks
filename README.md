@@ -39,13 +39,13 @@ Suspending Tasks adds an extension function, that allows you to write synchronou
             .whereEqualTo("foo", "bar")
             .limit(1)
             .get()
-            .awaitResult()
+            .await()
 
         if (search.isSuccessful && search.result!!.documents.isNotEmpty()) {
 
             val innerCollection = search.result
                 .documents.first().reference.delete()
-                .awaitResult()
+                .await()
 
             if (innerCollection.isSuccessful) {
                 doSomeOtherStuff()
@@ -68,7 +68,7 @@ Or skip straight to the objects you need!
             .whereEqualTo("foo", "bar")
             .limit(1)
             .get()
-            .awaitResult()
+            .await()
             .result
             ?.documents
             ?.first()
@@ -76,7 +76,7 @@ Or skip straight to the objects you need!
             ?.collection("blah")
             ?.document("document")
             ?.get()
-            ?.awaitResult()
+            ?.await()
             ?.doIfSuccessful { doSomething() }
 
     }
