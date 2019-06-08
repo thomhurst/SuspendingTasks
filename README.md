@@ -1,2 +1,72 @@
 # SuspendingTasks
 Suspending Tasks for removing callbacks in Android
+
+Tired of callbacks? Making code harder to write? A callback in a callback?
+
+```kotlin
+fun doStuff() {
+
+        FirebaseFirestore.getInstance()
+            .collection("collection")
+            .whereEqualTo("foo", "bar")
+            .limit(1)
+            .get()
+            .addOnSuccessListener { queryDocumentSnapshots ->
+                val documents = queryDocumentSnapshots.documents
+                if (documents.isNotEmpty()) {
+                    documents.first().reference.collection("collection2")
+                        .get()
+                        .addOnSuccessListener { querySnapshot ->
+                            doSomeOtherStuff()
+                        }
+                        .addOnFailureListener { exception ->
+                            showError()
+                        }
+                }
+            }
+            
+    }
+```
+
+Suspending Tasks adds an extension function, that allows you to write synchronous-style code, by wrapping these Task callbacks into suspending coroutines.
+
+```kotlin
+    suspend fun doStuff() {
+
+        val search = FirebaseFirestore.getInstance()
+            .collection("collection")
+            .whereEqualTo("foo", "bar")
+            .limit(1)
+            .get()
+            .awaitResult()
+
+        if (search.isSuccessful && search.result!!.documents.isNotEmpty()) {
+
+            val innerCollection = search.result
+                .documents.first().reference.collection("collection2")
+                .get()
+                .awaitResult()
+
+            if (innerCollection.isSuccessful) {
+                doSomeOtherStuff()
+            } else {
+                showError()
+            }
+
+        }
+
+    }
+```
+
+Nested callback issues can be removed. Code can become clearer and more easily manageable.
+
+# Usage
+
+On a `Task<T>` object, call `awaitResult()`
+You will receive a `CompletedTask<T>` object.
+
+The `awaitResult()` method is a `suspend fun` meaning it needs to be launched on a coroutine. This is because this will be a long running task, and may take a while to run, and so we don't want to freeze our UI while we run it.
+
+If you enjoy, please buy me a coffee :)
+
+<a href="https://www.buymeacoffee.com/tomhurst" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
