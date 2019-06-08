@@ -1,1 +1,1 @@
-include ':suspendingtasks'
+include ':app'
