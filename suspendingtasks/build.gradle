@@ -20,18 +20,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation 'junit:junit:4.12'
-
-    api 'com.google.firebase:firebase-core:16.0.9'
-    api 'com.google.firebase:firebase-iid:18.0.0'
-    api 'com.google.firebase:firebase-auth:17.0.0'
-    api 'com.google.firebase:firebase-firestore:19.0.2'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1"

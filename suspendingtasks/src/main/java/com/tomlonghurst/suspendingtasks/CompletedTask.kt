@@ -1,7 +1,6 @@
 package com.tomlonghurst.suspendingtasks
 
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.Exception
 
 class CompletedTask<T> internal constructor(task: Task<T>) {
