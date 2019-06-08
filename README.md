@@ -1,6 +1,8 @@
 # SuspendingTasks
 Suspending Tasks for removing callbacks in Android
 
+[![](https://jitpack.io/v/thomhurst/SuspendingTasks.svg)](https://jitpack.io/#thomhurst/SuspendingTasks)
+
 Tired of callbacks? Making code harder to write? A callback in a callback?
 
 ```kotlin
@@ -59,6 +61,25 @@ Suspending Tasks adds an extension function, that allows you to write synchronou
 ```
 
 Nested callback issues can be removed. Code can become clearer and more easily manageable.
+
+## Install
+
+Add Jitpack to your repositories in your `build.gradle` file
+
+```groovy
+allprojects {
+    repositories {
+      // ...
+      maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Add the below to your dependencies, again in your gradle.build file
+
+```groovy
+implementation 'com.github.thomhurst:SuspendingTasks:{version}'
+```
 
 # Usage
 
