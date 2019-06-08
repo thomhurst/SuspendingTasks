@@ -16,8 +16,7 @@ fun doStuff() {
             .addOnSuccessListener { queryDocumentSnapshots ->
                 val documents = queryDocumentSnapshots.documents
                 if (documents.isNotEmpty()) {
-                    documents.first().reference.collection("collection2")
-                        .get()
+                    documents.first().reference.delete()
                         .addOnSuccessListener { querySnapshot ->
                             doSomeOtherStuff()
                         }
@@ -45,8 +44,7 @@ Suspending Tasks adds an extension function, that allows you to write synchronou
         if (search.isSuccessful && search.result!!.documents.isNotEmpty()) {
 
             val innerCollection = search.result
-                .documents.first().reference.collection("collection2")
-                .get()
+                .documents.first().reference.delete()
                 .awaitResult()
 
             if (innerCollection.isSuccessful) {
@@ -56,6 +54,30 @@ Suspending Tasks adds an extension function, that allows you to write synchronou
             }
 
         }
+
+    }
+```
+
+Or skip straight to the objects you need!
+
+```kotlin
+    suspend fun doStuff() {
+
+        FirebaseFirestore.getInstance()
+            .collection("collection")
+            .whereEqualTo("foo", "bar")
+            .limit(1)
+            .get()
+            .awaitResult()
+            .result
+            ?.documents
+            ?.first()
+            ?.reference
+            ?.collection("blah")
+            ?.document("document")
+            ?.get()
+            ?.awaitResult()
+            ?.doIfSuccessful { doSomething() }
 
     }
 ```
