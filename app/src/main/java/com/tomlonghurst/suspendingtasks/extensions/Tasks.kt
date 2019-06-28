@@ -1,6 +1,7 @@
-package com.tomlonghurst.suspendingtasks
+package com.tomlonghurst.suspendingtasks.extensions
 
 import com.google.android.gms.tasks.Task
+import com.tomlonghurst.suspendingtasks.models.CompletedTask
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

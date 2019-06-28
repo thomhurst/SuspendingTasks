@@ -1,4 +1,4 @@
-package com.tomlonghurst.suspendingtasks
+package com.tomlonghurst.suspendingtasks.models
 
 import com.google.android.gms.tasks.Task
 import java.lang.Exception
