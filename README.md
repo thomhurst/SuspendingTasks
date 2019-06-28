@@ -1,6 +1,9 @@
 # SuspendingTasks
 Suspending Tasks for removing callbacks in Android
 
+This library requires Kotlin and Kotlin Coroutines.
+
+
 [![](https://jitpack.io/v/thomhurst/SuspendingTasks.svg)](https://jitpack.io/#thomhurst/SuspendingTasks)
 
 Tired of callbacks? Making code harder to write? A callback in a callback?
