@@ -108,7 +108,7 @@ implementation 'com.github.thomhurst:SuspendingTasks:{version}'
 
 # Usage
 
-On a `Task<T>` object, call `awaitResult()`
+On a `Task<T>` object, call `await()`
 You will receive a `CompletedTask<T>` object.
 
 The `awaitResult()` method is a `suspend fun` meaning it needs to be launched on a coroutine. This is because this will be a long running task, and may take a while to run, and so we don't want to freeze our UI while we run it.
