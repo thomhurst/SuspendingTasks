@@ -12,7 +12,7 @@ suspend fun <T> Task<T>.await() = suspendCoroutine<CompletedTask<T?>> { continua
         }
 
         addOnCanceledListener {
-            continuation.resume(CompletedTask(null))
+            continuation.resume(CompletedTask(task = null))
         }
     } catch (e: Exception) {
         continuation.resume(CompletedTask(e))
