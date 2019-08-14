@@ -7,17 +7,27 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 suspend fun <T> Task<T>.await() = suspendCoroutine<CompletedTask<T?>> { continuation ->
+    var resumed = false
     try {
         addOnCompleteListener { task ->
-            continuation.resume(CompletedTask(task))
+            if(!resumed) {
+                resumed = true
+                continuation.resume(CompletedTask(task))
+            }
         }
 
         addOnCanceledListener {
-            continuation.resume(CompletedTask(task = null))
+            if(!resumed) {
+                resumed = true
+                continuation.resume(CompletedTask(task = null))
+            }
         }
 
         Tasks.await(this)
     } catch (e: Exception) {
-        continuation.resume(CompletedTask(e))
+        if(!resumed) {
+            resumed = true
+            continuation.resume(CompletedTask(e))
+        }
     }
 }
