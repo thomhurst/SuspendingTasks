@@ -9,12 +9,12 @@ import kotlin.coroutines.suspendCoroutine
 
 suspend fun <T> Task<T>.await(): CompletedTask<T> {
     if (isComplete) {
-        return CompletedTask(result, exception, isCanceled)
+        return CompletedTask(this)
     }
 
     return suspendCoroutine { cont ->
         addOnCompleteListener { completedTask ->
-            cont.resume(CompletedTask(completedTask.result, completedTask.exception, completedTask.isCanceled))
+            cont.resume(CompletedTask(completedTask))
         }
     }
 }
