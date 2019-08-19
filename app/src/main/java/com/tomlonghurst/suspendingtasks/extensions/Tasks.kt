@@ -1,33 +1,38 @@
 package com.tomlonghurst.suspendingtasks.extensions
 
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.tomlonghurst.suspendingtasks.models.CompletedTask
+import kotlinx.coroutines.CancellationException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun <T> Task<T>.await() = suspendCoroutine<CompletedTask<T?>> { continuation ->
-    var resumed = false
-    try {
-        addOnCompleteListener { task ->
-            if(!resumed) {
-                resumed = true
-                continuation.resume(CompletedTask(task))
+suspend fun <T> Task<T>.await(): CompletedTask<T> {
+    // fast path
+    if (isComplete) {
+        val e = exception
+        return if (e == null) {
+            if (isCanceled) {
+                CompletedTask(CancellationException("Task $this was cancelled."))
+            } else {
+                CompletedTask(this)
             }
+        } else {
+            CompletedTask(e)
         }
+    }
 
-        addOnCanceledListener {
-            if(!resumed) {
-                resumed = true
-                continuation.resume(CompletedTask(task = null))
+    return suspendCoroutine { cont ->
+        addOnCompleteListener {
+            val e = exception
+            if (e == null) {
+                if (isCanceled) {
+                    cont.resume(CompletedTask(CancellationException("Task $this was cancelled.")))
+                } else {
+                    cont.resume(CompletedTask(this))
+                }
+            } else {
+                cont.resume(CompletedTask(e))
             }
-        }
-
-        Tasks.await(this)
-    } catch (e: Exception) {
-        if(!resumed) {
-            resumed = true
-            continuation.resume(CompletedTask(e))
         }
     }
 }
