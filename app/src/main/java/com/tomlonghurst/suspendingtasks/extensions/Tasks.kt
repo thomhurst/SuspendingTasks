@@ -22,13 +22,13 @@ suspend fun <T> Task<T>.await(): CompletedTask<T> {
     }
 
     return suspendCoroutine { cont ->
-        addOnCompleteListener {
+        addOnCompleteListener { completedTask ->
             val e = exception
             if (e == null) {
                 if (isCanceled) {
                     cont.resume(CompletedTask(CancellationException("Task $this was cancelled.")))
                 } else {
-                    cont.resume(CompletedTask(this))
+                    cont.resume(CompletedTask(completedTask))
                 }
             } else {
                 cont.resume(CompletedTask(e))
