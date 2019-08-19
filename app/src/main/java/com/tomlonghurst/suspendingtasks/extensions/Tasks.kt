@@ -4,6 +4,7 @@ package com.tomlonghurst.suspendingtasks.extensions
 
 import com.google.android.gms.tasks.Task
 import com.tomlonghurst.suspendingtasks.models.CompletedTask
+import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 suspend fun <T> Task<T>.await(): CompletedTask<T> {
@@ -13,7 +14,7 @@ suspend fun <T> Task<T>.await(): CompletedTask<T> {
 
     return suspendCoroutine { cont ->
         addOnCompleteListener { completedTask ->
-            CompletedTask(completedTask.result, completedTask.exception, completedTask.isCanceled)
+            cont.resume(CompletedTask(completedTask.result, completedTask.exception, completedTask.isCanceled))
         }
     }
 }
