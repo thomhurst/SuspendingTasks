@@ -14,12 +14,12 @@ suspend fun <T> Task<T>.await(): CompletedTask<T> {
         val e = exception
         return if (e == null) {
             if (isCanceled) {
-                CompletedTask(null, CancellationException("Task $this was cancelled."), true)
+                CompletedTask(null as? T?, CancellationException("Task $this was cancelled."), true)
             } else {
                 CompletedTask(result as T, null, false)
             }
         } else {
-            CompletedTask(null, e, false)
+            CompletedTask(null as? T?, e, false)
         }
     }
 
@@ -28,12 +28,12 @@ suspend fun <T> Task<T>.await(): CompletedTask<T> {
             val e = exception
             if (e == null) {
                 if (isCanceled) {
-                    cont.resume(CompletedTask(null, CancellationException("Task $this was cancelled."), true))
+                    cont.resume(CompletedTask(null as? T?, CancellationException("Task $this was cancelled."), true))
                 } else {
                     cont.resume(CompletedTask(completedTask.result as T, null, false))
                 }
             } else {
-                cont.resume(CompletedTask(null, e, false))
+                cont.resume(CompletedTask(null as? T?, e, false))
             }
         }
     }
