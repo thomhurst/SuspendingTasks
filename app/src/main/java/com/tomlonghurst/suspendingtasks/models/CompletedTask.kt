@@ -1,6 +1,6 @@
 package com.tomlonghurst.suspendingtasks.models
 
-class CompletedTask<T> internal constructor(private val result: T?, val exception: Exception?, val isCancelled: Boolean) {
+class CompletedTask<T> internal constructor(val result: T?, val exception: Exception?, val isCancelled: Boolean) {
 
     val isSuccessful = exception != null
 
