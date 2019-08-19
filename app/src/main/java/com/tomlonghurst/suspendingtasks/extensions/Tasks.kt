@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.tomlonghurst.suspendingtasks.extensions
 
 import com.google.android.gms.tasks.Task
@@ -12,12 +14,12 @@ suspend fun <T> Task<T>.await(): CompletedTask<T> {
         val e = exception
         return if (e == null) {
             if (isCanceled) {
-                CompletedTask(CancellationException("Task $this was cancelled."))
+                CompletedTask(null, CancellationException("Task $this was cancelled."), true)
             } else {
-                CompletedTask(this)
+                CompletedTask(result as T, null, false)
             }
         } else {
-            CompletedTask(e)
+            CompletedTask(null, e, false)
         }
     }
 
@@ -26,12 +28,12 @@ suspend fun <T> Task<T>.await(): CompletedTask<T> {
             val e = exception
             if (e == null) {
                 if (isCanceled) {
-                    cont.resume(CompletedTask(CancellationException("Task $this was cancelled.")))
+                    cont.resume(CompletedTask(null, CancellationException("Task $this was cancelled."), true))
                 } else {
-                    cont.resume(CompletedTask(completedTask))
+                    cont.resume(CompletedTask(completedTask.result as T, null, false))
                 }
             } else {
-                cont.resume(CompletedTask(e))
+                cont.resume(CompletedTask(null, e, false))
             }
         }
     }
